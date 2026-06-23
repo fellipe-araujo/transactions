@@ -1,8 +1,15 @@
-import knex from 'knex'
+import Knex from 'knex'
 
-export const db = knex({
+export const config: Knex.Knex.Config = {
   client: 'sqlite',
   connection: {
-    filename: './tmp/app.db',
+    filename: './db/app.db',
   },
-})
+  useNullAsDefault: true,
+  migrations: {
+    extension: 'ts',
+    directory: './db/migrations',
+  },
+}
+
+export const knex = Knex(config)
