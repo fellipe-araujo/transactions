@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { randomUUID } from 'node:crypto'
 import { db } from '../database'
@@ -10,7 +10,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transactions }
   })
 
-  app.get('/:id', async (request) => {
+  app.get('/:id', async (request: FastifyRequest) => {
     const getTransactionsParamsSchema = z.object({
       id: z.uuid(),
     })
@@ -32,7 +32,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { summary }
   })
 
-  app.post('/', async (request, reply) => {
+  app.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
     const createTransactionBodySchema = z.object({
       title: z.string(),
       amount: z.number(),
@@ -42,6 +42,17 @@ export async function transactionsRoutes(app: FastifyInstance) {
     const { title, amount, type } = createTransactionBodySchema.parse(
       request.body,
     )
+
+    let sessionId = request.cookies.sessionId
+
+    if (!sessionId) {
+      sessionId = randomUUID()
+
+      reply.setCookie('sessionId', sessionId, {
+        path: '/',
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      })
+    }
 
     await db('transactions').insert({
       id: randomUUID(),
