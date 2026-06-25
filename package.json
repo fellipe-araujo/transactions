@@ -2,6 +2,9 @@
   "name": "transactions",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "knex": "tsx ./node_modules/knex/bin/cli.js",
@@ -17,7 +20,7 @@
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
     "knex": "^3.2.10",
-    "sqlite3": "^6.0.1",
+    "pg": "^8.22.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -25,6 +28,7 @@
     "@types/node": "^26.0.0",
     "@types/supertest": "^7.2.0",
     "eslint": "^8.57.1",
+    "sqlite3": "^6.0.1",
     "supertest": "^7.2.2",
     "tsup": "^8.5.1",
     "tsx": "^4.22.4",
