@@ -1,16 +1,10 @@
 import fastify from 'fastify'
-import { db } from './database'
+import { transactionsRoutes } from './routes/transactions'
 import { env } from './env'
 
 const app = fastify()
 
-app.get('/hello', async () => {
-  const transactions = await db('transactions')
-    .where('amount', 1000)
-    .select('*')
-
-  return transactions
-})
+app.register(transactionsRoutes)
 
 app
   .listen({
